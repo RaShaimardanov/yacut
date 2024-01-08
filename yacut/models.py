@@ -1,7 +1,4 @@
-import re
 from datetime import datetime
-
-import shortuuid
 
 from . import db
 
@@ -17,19 +14,3 @@ class URLMap(db.Model):
             url=self.original,
             short_link=self.short,
         )
-
-    @staticmethod
-    def is_valid_short(short):
-        return re.match(r'^[a-zA-Z0-9]{1,16}$', short)
-
-    @staticmethod
-    def is_short_unique(short):
-        return URLMap.query.filter_by(short=short).first() is None
-
-    @classmethod
-    def get_unique_short_id(cls):
-        while True:
-            key = shortuuid.ShortUUID().random(length=6)
-            if cls.is_short_unique(key):
-                break
-        return key
